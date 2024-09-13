@@ -1,0 +1,46 @@
+{
+  "name": "ts-auth-service-1625",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node src/server.ts",
+    "dev": "nodemon src/server.ts",
+    "predev": "echo 'Starting development server...'",
+    "development": "ts-node-dev --respawn --transpile-only src/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.19.1",
+    "@types/express": "^4.17.21",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "express-validator": "^7.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "nanoid": "^5.0.7",
+    "nodemailer": "^6.9.15",
+    "prisma": "^5.19.1",
+    "speakeasy": "^2.0.0",
+    "ts-node-dev": "^2.0.0",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^22.5.3",
+    "@types/nodemailer": "^6.4.15",
+    "@types/speakeasy": "^2.0.10",
+    "@types/uuid": "^10.0.0",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.5.4"
+  }
+}
