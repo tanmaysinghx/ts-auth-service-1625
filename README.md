@@ -1,4 +1,4 @@
-# ts-auth-service-1818
+# ts-auth-service-1625
 
 ## Overview
 
@@ -7,16 +7,17 @@ This project is an authentication service built using Node.js, Express, and Pris
 ## Prerequisites
 
 - Node.js (v18.x or later)
-- PostgreSQL (or another supported SQL database)
+- MySQL (or another supported SQL database)
 - Prisma CLI
+- Typescript
 
 ## Setup and Installation
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/tanmaysinghx/ts-auth-service-1818.git
-cd ts-auth-service-1818
+git clone https://github.com/tanmaysinghx/ts-auth-service-1625.git
+cd ts-auth-service-1625
 
 ```
 
