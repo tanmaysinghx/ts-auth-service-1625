@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is an authentication service built using Node.js, Express, and Prisma. It handles user registration, login, token management, and more.
+This project is an authentication service built using Node.js, Express, Typescript and Prisma. It handles user registration, login, change-password, token management, OTP verification and more.
 
 ## Prerequisites
 
@@ -31,12 +31,14 @@ npm install
 ### 3. Configure Environment Variables
 
 - Rename ".env.example" to ".env"
-- Create a DB cluster in mongo DB or your preferred DB
+- Create a DB cluster in SQL DB or your preferred DB
 
 ```bash
-DATABASE_URL=your_database_connection_string
-PORT=your_port_number
-JWT_SECRET=your_jwt_secret
+DATABASE_URL="mysql://root:root@localhost:3306/testdb2"
+ACCESS_TOKEN_SECRET=your_access_token_secret
+REFRESH_TOKEN_SECRET=your_refresh_token_secret
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-email-password
 
 ```
 
@@ -47,10 +49,24 @@ npx prisma migrate deploy
 
 ```
 
-### 5. Start the Application
+### 5. Run scripts for roles
+
+```bash
+npm run seed
+
+```
+
+### 6. Start the Application
 
 ```bash
 npm run dev
+
+```
+
+### 7. Redeploy DB changes
+
+```bash
+npx prisma migrate dev --name add_otp_table
 
 ```
 
@@ -58,14 +74,14 @@ npm run dev
 
 ### 1. User Registration
 
-- Endpoint: POST /auth/register
+- Endpoint: POST /v2/api/auth/register
 - Request Body:
 
 ```bash
 {
-  "email": "user@example.com",
-  "password": "yourpassword",
-  "username": "username"
+  "email": "superuser1@gmail.com",
+  "password": "password",
+  "roleName": "superuserer" 
 }
 
 ```

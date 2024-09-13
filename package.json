@@ -8,7 +8,8 @@
     "start": "ts-node src/server.ts",
     "dev": "nodemon src/server.ts",
     "predev": "echo 'Starting development server...'",
-    "development": "ts-node-dev --respawn --transpile-only src/server.ts"
+    "development": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "seed": "ts-node src/config/seed.ts"
   },
   "keywords": [],
   "author": "",
