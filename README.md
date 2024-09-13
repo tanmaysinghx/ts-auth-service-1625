@@ -90,11 +90,18 @@ npx prisma migrate dev --name add_otp_table
   
 ```bash
 {
-  "message": "User registered successfully",
-  "user": {
-    "id": 1,
-    "email": "user@example.com",
-    "username": "username"
+    "success": true,
+    "transactionId": "a43282df-dd89-4245-8eaf-da2e9c7af870",
+    "message": "User is successfully registered",
+    "data": {
+        "id": "c3e70bd9",
+        "email": "testSuperuser8@gmail.com",
+        "password": "$2b$10$eYVguUurokQK.d0NwnhZNe4LnE4F5TxwNmUF.NNDL9mUA4.tjgpYu",
+        "roleId": "0001",
+        "createdAt": "2024-09-13T20:12:09.808Z",
+        "updatedAt": "2024-09-13T20:12:09.808Z",
+        "lastLoginAt": null
+    }
 }
 
 ```
