@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  app:
+    environment:
+      - NODE_ENV=development,
+      - DATABASE_URL="mysql://root:root@localhost:3306/db1625"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
