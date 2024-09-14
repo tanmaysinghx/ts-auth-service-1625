@@ -34,4 +34,4 @@ jobs:
       # Step 5: Push Docker image to Docker Hub
       - name: Push Docker image
         run: |
-          docker push your-dockerhub-username/your-image-name:latest
+          docker push tanmaysinghx/ts-auth-service-1625:latest
