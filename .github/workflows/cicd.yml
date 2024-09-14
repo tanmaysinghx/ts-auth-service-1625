@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - dev-deployment
-      - uat
+      - uat-deployment
 
 jobs:
   build:
@@ -29,7 +29,7 @@ jobs:
       # Step 4: Build Docker image
       - name: Build Docker image
         run: |
-          docker build -t your-dockerhub-username/your-image-name:latest .
+          docker build -t tanmaysinghx/ts-auth-service-1625:latest .
 
       # Step 5: Push Docker image to Docker Hub
       - name: Push Docker image
