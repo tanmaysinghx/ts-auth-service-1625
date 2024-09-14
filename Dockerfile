@@ -11,8 +11,8 @@ RUN npm install
 COPY . .
 
 # Generate Prisma client
-RUN npx prisma migrate deploy
+RUN npx prisma generate
 
 # Expose port and run application
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["npm", "dev"]
