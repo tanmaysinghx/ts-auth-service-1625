@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - dev-deployment
-      - uat-deployment
+      - uat
 
 jobs:
   build:
@@ -22,22 +22,25 @@ jobs:
       # Step 3: Build Docker Image based on the branch (dev or uat)
       - name: Build Docker Image
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/dev" ]; then
             docker-compose -f docker-compose.yml -f docker-compose.dev.yml build
-          elif [ "${{ github.ref }}" == "refs/heads/uat" ]; then
+          elif [ "${{ github.ref }}" = "refs/heads/uat" ]; then
             docker-compose -f docker-compose.yml -f docker-compose.uat.yml build
+          fi
 
       # Step 4: Run tests (optional, based on your setup)
       - name: Run Tests
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/dev" ]; then
             docker-compose -f docker-compose.yml -f docker-compose.dev.yml run app npm test
+          fi
 
       # Step 5: Deploy to appropriate environment
       - name: Deploy to Environment
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
+          if [ "${{ github.ref }}" = "refs/heads/dev" ]; then
             docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
-          elif [ "${{ github.ref }}" == "refs/heads/uat" ]; then
+          elif [ "${{ github.ref }}" = "refs/heads/uat" ]; then
             echo "Deploying to UAT (e.g., DigitalOcean)"
             # Add UAT deployment steps here (e.g., SSH or DigitalOcean API)
+          fi
