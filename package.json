@@ -10,7 +10,7 @@
     "development": "ts-node-dev --respawn --transpile-only src/server.ts",
     "seed": "ts-node src/config/seed.ts",
     "lint": "eslint .",
-    "test": "jest" 
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -41,6 +41,8 @@
     "@types/nodemailer": "^6.4.15",
     "@types/speakeasy": "^2.0.10",
     "@types/uuid": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.5.0",
+    "@typescript-eslint/parser": "^8.5.0",
     "eslint": "^9.10.0",
     "globals": "^15.9.0",
     "nodemon": "^3.1.4",
