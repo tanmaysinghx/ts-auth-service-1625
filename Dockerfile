@@ -1,22 +1,18 @@
-# Use Node.js as the base image
-FROM node:18-alpine
+FROM node:18
 
 # Set working directory
 WORKDIR /usr/src/app
 
-# Copy package.json and install dependencies
+# Copy package files
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the application code
+# Copy application files
 COPY . .
 
-# Expose the port the app will run on
+# Generate Prisma client
+RUN npx prisma generate
+
+# Expose port and run application
 EXPOSE 3000
-
-# Use ARG for environment-specific variables (default to development)
-ARG NODE_ENV=development
-ENV NODE_ENV=$NODE_ENV
-
-# Start the app
 CMD ["npm", "start"]
