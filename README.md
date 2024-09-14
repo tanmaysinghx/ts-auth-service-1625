@@ -108,15 +108,14 @@ npx prisma migrate dev --name add_otp_table
 
 ### 2. User Login
 
-- Endpoint: POST /auth/login
+- Endpoint: POST /v2/api/auth/login
 - Request Body:
 
 ```bash
 {
-  "email": "user@example.com",
-  "password": "yourpassword"
+  "email": "testSuperuser8@gmail.com",
+  "password": "password"
 }
-
 
 ```
 
@@ -124,21 +123,28 @@ npx prisma migrate dev --name add_otp_table
   
 ```bash
 {
-    "message": "Login successful",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzIxNDk2NjY4LCJleHAiOjE3MjE1MDAyNjh9.O1LFevtBac6kNYckZ7tTZNX4eh2Cpzc440nAbysgomg",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzIxNDk2NjY4LCJleHAiOjE3MjIxMDE0Njh9.QpliaY1pH8AQ6xWVVuFiEvE6ChLlAuKuhUF3sd9Tgi8"
+    "success": true,
+    "transactionId": "f206b71c-1878-4a65-be9c-d468bbd4a504",
+    "message": "User is successfully loggedin",
+    "data": {
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjM2U3MGJkOSIsInJvbGVJZCI6IjAwMDEiLCJpYXQiOjE3MjYzMDU1OTgsImV4cCI6MTcyNjMwNjQ5OH0.XSgJ1IcETIRbeslmTNguogETrkCkoD54yieF177-JBs",
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjM2U3MGJkOSIsImlhdCI6MTcyNjMwNTU5OCwiZXhwIjoxNzI2OTEwMzk4fQ.D_KZSteHtFvr4ovBZtOL-DP0a4SqmARylebZ4M0e2Kc",
+        "email": "testSuperuser8@gmail.com",
+        "roleId": "0001",
+        "roleName": "Superuser"
+    }
 }
 
 ```
 
 ### 3. Refresh Token
 
-- Endpoint: POST /refresh-token
+- Endpoint: POST /v2/api/auth/refresh-token
 - Request Body:
 
 ```bash
 {
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzIxNDk2NjY4LCJleHAiOjE3MjIxMDE0Njh9.QpliaY1pH8AQ6xWVVuFiEvE6ChLlAuKuhUF3sd9Tgi8"
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjM2U3MGJkOSIsImlhdCI6MTcyNjMwNTU5OCwiZXhwIjoxNzI2OTEwMzk4fQ.D_KZSteHtFvr4ovBZtOL-DP0a4SqmARylebZ4M0e2Kc" 
 }
 
 ```
@@ -147,8 +153,12 @@ npx prisma migrate dev --name add_otp_table
   
 ```bash
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzIxNDk2NzI4LCJleHAiOjE3MjE1MDAzMjh9.S6QfdqsGBnfJo2Y-GRgvaSs1-HaULXnDBwyIW_pWV-Y",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzIxNDk2NzI4LCJleHAiOjE3MjIxMDE1Mjh9.eFgBWomAe8ItkUrrskrHjhsPW75_HJRt9jYxa7gdFVE"
+    "success": true,
+    "transactionId": "d4facde5-c0fc-413b-8e6c-65750a5f8f3a",
+    "message": "Refresh token generated",
+    "data": {
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjM2U3MGJkOSIsInJvbGVJZCI6IjAwMDEiLCJpYXQiOjE3MjYzMDU3MDgsImV4cCI6MTcyNjMwNjYwOH0.VzQIlfQ3ChnHB_R1-OEtbAsOTQWc69IY4E_tLVJf1mM"
+    }
 }
 
 ```
@@ -160,7 +170,7 @@ npx prisma migrate dev --name add_otp_table
 
 ```bash
 {
-    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzIxNDk2NzI4LCJleHAiOjE3MjE1MDAzMjh9.S6QfdqsGBnfJo2Y-GRgvaSs1-HaULXnDBwyIW_pWV-Y"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjM2U3MGJkOSIsInJvbGVJZCI6IjAwMDEiLCJpYXQiOjE3MjYzMDU3MDgsImV4cCI6MTcyNjMwNjYwOH0.VzQIlfQ3ChnHB_R1-OEtbAsOTQWc69IY4E_tLVJf1mM"
 }
 
 ```
@@ -169,11 +179,46 @@ npx prisma migrate dev --name add_otp_table
   
 ```bash
 {
-    "user": {
-        "id": 3,
-        "email": "tester3@gmail.com",
-        "username": "tester3"
-}
+    "success": true,
+    "transactionId": "9249ae6a-396b-41d0-a8cd-861b13d749d4",
+    "message": "Refresh token generated",
+    "data": {
+        "success": true,
+        "message": "Token is valid",
+        "userId": "c3e70bd9",
+        "roleId": "0001",
+        "iat": 1726305708,
+        "exp": 1726306608
     }
+}
 
-```"# ts-auth-service-1625" 
+```
+
+### 4. Change Password
+
+- Endpoint: POST /check-token
+- Request Body: (In Request Headers)
+
+```bash
+{
+  "email": "testSuperuser8@gmail.com",
+  "currentPassword": "password",
+  "newPassword": "passwordnew"
+}
+
+
+```
+
+- Response Body:
+  
+```bash
+{
+    "success": true,
+    "transactionId": "6809f54b-d67f-4c2b-95a0-48bff6e74373",
+    "message": "Password chnaged succesfully",
+    "data": "Password updated successfully"
+}
+
+```
+
+"# ts-auth-service-1625" 
