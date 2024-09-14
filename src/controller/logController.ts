@@ -1,12 +1,18 @@
 import { Request, Response } from 'express';
 import { getAllLogs } from '../services/logService';
+import { errorResponse, successResponse } from '../utils/responseUtils';
 
-export const getLogs = async (req: Request, res: Response) => {
+interface CustomRequest extends Request {
+  transactionId?: string;
+}
+
+export const getLogs = async (req: CustomRequest, res: Response) => {
+  const transactionId = req.transactionId;
   try {
     const logs = await getAllLogs();
-    return res.json(logs);
+    return res.status(201).json(successResponse(logs, "Application logs generated succesfully", transactionId));
   } catch (err: any) {
     const errorMessage = err?.message || 'Failed to retrieve logs';
-    return res.status(400).json({ error: errorMessage });
+    return res.status(400).json(errorResponse(errorMessage, "Logs generation failure", transactionId));
   }
 };

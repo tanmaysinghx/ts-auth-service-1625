@@ -165,7 +165,7 @@ npx prisma migrate dev --name add_otp_table
 
 ### 4. Verify JWT Token
 
-- Endpoint: POST /check-token
+- Endpoint: POST /v2/api/auth/verify/verify-token
 - Request Body: (In Request Headers)
 
 ```bash
@@ -191,12 +191,11 @@ npx prisma migrate dev --name add_otp_table
         "exp": 1726306608
     }
 }
-
 ```
 
-### 4. Change Password
+### 5. Change Password
 
-- Endpoint: POST /check-token
+- Endpoint: POST /v2/api/auth/change-password
 - Request Body: (In Request Headers)
 
 ```bash
@@ -219,6 +218,49 @@ npx prisma migrate dev --name add_otp_table
     "data": "Password updated successfully"
 }
 
+```
+
+### 5. Application logs
+
+- Endpoint: GET /v2/api/logs/getAllLogs
+- Request Header: (In Request Headers)
+
+```bash
+{
+  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjM2U3MGJkOSIsInJvbGVJZCI6IjAwMDEiLCJpYXQiOjE3MjYzMDg0NjEsImV4cCI6MTcyNjMwOTM2MX0.Dckrgq_Jq9kqP3726_uV6YPvAXXbCW-tAOudCftftZI",
+}
+
+
+```
+
+- Response Body:
+  
+```bash
+{
+    "success": true,
+    "transactionId": "27b2eecc-16ac-4e65-95c2-d2bcc1aa4b66",
+    "message": "Application logs generated succesfully",
+    "data": [
+        {
+            "id": "2d654f1f-3285-4b91-9067-5605262e714c",
+            "userId": "c3e70bd9",
+            "roleId": "0001",
+            "email": "testSuperuser8@gmail.com",
+            "operation": "login",
+            "createdAt": "2024-09-14T10:07:41.483Z",
+            "userIpAddress": "123.456.789.0"
+        },
+        {
+            "id": "28cc27b6-4713-497e-8b4d-64d5754da247",
+            "userId": "c3e70bd9",
+            "roleId": "0001",
+            "email": "testSuperuser8@gmail.com",
+            "operation": "login",
+            "createdAt": "2024-09-14T10:00:52.396Z",
+            "userIpAddress": "123.456.789.0"
+        },
+    ]
+}
 ```
 
 "# ts-auth-service-1625" 

@@ -18,8 +18,6 @@ export const register = async (req: CustomRequest, res: Response) => {
 };
 
 export const login = async (req: CustomRequest, res: Response) => {
-  const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-  console.log("Ip User", ipAddress);
   const transactionId = req.transactionId;
   try {
     const tokens = await loginUser(req.body);
