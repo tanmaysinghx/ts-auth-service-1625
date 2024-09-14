@@ -17,6 +17,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 export const adminOnly = async (req: Request, res: Response, next: NextFunction) => {
   const userId = (req as any).user.userId;
   const user = await prisma.user.findUnique({ where: { id: userId } });
-  if (user?.roleId !== 'admin') return res.status(403).json({ error: 'Access Denied' });
+  console.log(user?.roleId)
+  if (user?.roleId !== '0001') return res.status(403).json({ error: 'Access Denied' });
   next();
 };
