@@ -1,0 +1,42 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - dev-deployment
+      - uat-deployment
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Docker Buildx (for building images)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      # Step 3: Build Docker Image based on the branch (dev or uat)
+      - name: Build Docker Image
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
+            docker-compose -f docker-compose.yml -f docker-compose.dev.yml build
+          elif [ "${{ github.ref }}" == "refs/heads/uat" ]; then
+            docker-compose -f docker-compose.yml -f docker-compose.uat.yml build
+
+      # Step 4: Run tests (optional, based on your setup)
+      - name: Run Tests
+        run: |
+          docker-compose -f docker-compose.yml -f docker-compose.dev.yml run app npm test
+
+      # Step 5: Deploy to appropriate environment
+      - name: Deploy to Environment
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
+            docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+          elif [ "${{ github.ref }}" == "refs/heads/uat" ]; then
+            echo "Deploying to UAT (e.g., DigitalOcean)"
+            # Add your DigitalOcean deployment steps here (SSH or DigitalOcean API)
