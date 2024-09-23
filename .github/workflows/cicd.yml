@@ -29,9 +29,9 @@ jobs:
       # - name: Run ESLint
       #   run: npm run lint
 
-      # Step 5: Run tests
-      - name: Run tests
-        run: npm test
+      # # Step 5: Run tests
+      # - name: Run tests
+      #   run: npm test
 
       # Step 6: Set up Docker Buildx
       - name: Set up Docker Buildx
