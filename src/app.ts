@@ -4,10 +4,19 @@ import roleRoutes from './routes/roleRoutes';
 import logRoutes from './routes/logRoutes';
 import { transactionIdMiddleware } from './middleware/transactionIdMiddleware';
 import otpRoutes from './routes/otpRoutes';
+import cors from 'cors';
 
 const app = express();
 
 app.use(transactionIdMiddleware);
+
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}));
+
 app.use(express.json());
 
 app.use('/v2/api/auth', authRoutes);
