@@ -57,7 +57,6 @@ export const changePasswordService = async (data: { email: string; currentPasswo
   if (!user) {
     throw new Error('User not found');
   }
-  console.log(currentPassword, user.password)
   const isPasswordValid = await comparePassword(currentPassword, user.password);
   if (!isPasswordValid) {
     throw new Error('Current password is incorrect');
