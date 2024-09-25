@@ -57,7 +57,6 @@ export const changePasswordService = async (data: { email: string; currentPasswo
   if (!user) {
     throw new Error('User not found');
   }
-  console.log(currentPassword, user.password)
   const isPasswordValid = await comparePassword(currentPassword, user.password);
   if (!isPasswordValid) {
     throw new Error('Current password is incorrect');
@@ -84,7 +83,6 @@ export const refreshToken = async (refreshToken: string) => {
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
     });
-
     if (!user) {
       throw new Error('User not found');
     }
