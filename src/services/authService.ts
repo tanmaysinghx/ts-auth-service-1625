@@ -83,7 +83,6 @@ export const refreshToken = async (refreshToken: string) => {
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
     });
-
     if (!user) {
       throw new Error('User not found');
     }

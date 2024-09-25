@@ -5,7 +5,7 @@ import { Router } from 'express';
 
 const router = Router();
 
-router.post('/request-otp', requestOTP);       // To request an OTP
-router.post('/verify-otp', verifyOTPController);  // To verify the OTP
+router.post('/request-otp', requestOTP);
+router.post('/verify-otp', verifyOTPController);
 
 export default router;
