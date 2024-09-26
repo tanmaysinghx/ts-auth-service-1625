@@ -1,0 +1,273 @@
+{
+	"info": {
+		"_postman_id": "3f36b404-41cb-4fdc-9d10-5a1f352105ef",
+		"name": "ts-auth-service-1625",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15979674"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"user1@gmail.com\",\r\n  \"password\": \"password\",\r\n  \"roleName\": \"user\" \r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1625/v2/api/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1625",
+					"path": [
+						"v2",
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"user1@gmail.com\",\r\n  \"password\": \"password\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1625/v2/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1625",
+					"path": [
+						"v2",
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change Password",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OTM5MmZjMSIsInJvbGVJZCI6IjAwMDEiLCJpYXQiOjE3MjU3MzA1NDMsImV4cCI6MTcyNTczMTQ0M30.Nx5xr6gbRL2txHgIwSSC8JRliGcw0-AUbdwoI6Jkhtg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"testSuperuser8@gmail.com\",\r\n  \"currentPassword\": \"password\",\r\n  \"newPassword\": \"Tanmay@1999\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1625/v2/api/auth/change-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1625",
+					"path": [
+						"v2",
+						"api",
+						"auth",
+						"change-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjM2U3MGJkOSIsImlhdCI6MTcyNjMwNTU5OCwiZXhwIjoxNzI2OTEwMzk4fQ.D_KZSteHtFvr4ovBZtOL-DP0a4SqmARylebZ4M0e2Kc\" \r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1625/v2/api/auth/refresh-token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1625",
+					"path": [
+						"v2",
+						"api",
+						"auth",
+						"refresh-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify Token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjM2U3MGJkOSIsInJvbGVJZCI6IjAwMDEiLCJpYXQiOjE3MjYzMDU3MDgsImV4cCI6MTcyNjMwNjYwOH0.VzQIlfQ3ChnHB_R1-OEtbAsOTQWc69IY4E_tLVJf1mM\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1625/v2/api/auth/verify/verify-token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1625",
+					"path": [
+						"v2",
+						"api",
+						"auth",
+						"verify",
+						"verify-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create OTP",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"superuser@gmail.com\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1625/v2/api/otp/request-otp",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1625",
+					"path": [
+						"v2",
+						"api",
+						"otp",
+						"request-otp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify OTP",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"superuser@gmail.com\",\r\n  \"otp\": \"135527\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1625/v2/api/otp/verify-otp",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1625",
+					"path": [
+						"v2",
+						"api",
+						"otp",
+						"verify-otp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All logs",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjM2U3MGJkOSIsInJvbGVJZCI6IjAwMDEiLCJpYXQiOjE3MjYzMDg0NjEsImV4cCI6MTcyNjMwOTM2MX0.Dckrgq_Jq9kqP3726_uV6YPvAXXbCW-tAOudCftftZI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:1625/v2/api/logs/getAllLogs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1625",
+					"path": [
+						"v2",
+						"api",
+						"logs",
+						"getAllLogs"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
