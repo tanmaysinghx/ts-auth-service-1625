@@ -1,18 +1,23 @@
+# Use an official Node.js runtime as a parent image
 FROM node:18
 
-# Set working directory
+# Set the working directory
 WORKDIR /usr/src/app
 
-# Copy package files
+# Copy package.json and package-lock.json
 COPY package*.json ./
+
+# Install dependencies
 RUN npm install
 
-# Copy application files
+# Copy the rest of your application code
 COPY . .
 
 # Generate Prisma client
 RUN npx prisma generate
 
-# Expose port and run application
-EXPOSE 3000
+# Expose the application port
+EXPOSE 1625
+
+# Start the application
 CMD ["npm", "start"]
