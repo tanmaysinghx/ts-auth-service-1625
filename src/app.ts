@@ -2,6 +2,7 @@ import express from 'express';
 import authRoutes from './routes/authRoutes';
 import roleRoutes from './routes/roleRoutes';
 import logRoutes from './routes/logRoutes';
+import healthCheckRoutes from './routes/healthCheckRoutes'
 import { transactionIdMiddleware } from './middleware/transactionIdMiddleware';
 import otpRoutes from './routes/otpRoutes';
 import cors from 'cors';
@@ -23,5 +24,6 @@ app.use('/v2/api/auth', authRoutes);
 app.use('/v2/api/roles', roleRoutes);
 app.use('/v2/api/logs', logRoutes);
 app.use('/v2/api/otp', otpRoutes);
+app.use('/v2/api/health', healthCheckRoutes);
 
 export default app;
