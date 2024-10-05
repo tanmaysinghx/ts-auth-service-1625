@@ -68,7 +68,7 @@ jobs:
       - name: Pull Latest Docker Image
         run: |
           doctl compute ssh 449640053 --ssh-key-path ~/.ssh/id_rsa -- \
-          'docker pull tanmaysinghx/ts-auth-service-1625:latest'
+          'docker pull tanmaysinghx/ts-auth-service-1625:latest' -o StrictHostKeyChecking=no
           
       # Step 4: Restart Docker Container
       - name: Restart Docker Container
