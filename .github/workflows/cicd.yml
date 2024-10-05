@@ -51,29 +51,25 @@ jobs:
     runs-on: ubuntu-latest
     needs: build  # Ensure this job runs after the build job
     steps:
-      # Step 1: Checkout source code (optional, can be removed)
-      - name: Checkout source
-        uses: actions/checkout@v3
-
-      # Step 2: Install doctl
+      # Step 1: Install doctl
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-       # Step 3: Set up SSH Key
-    - name: Set up SSH Key
-      run: |
-        printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
+      # Step 2: Set up SSH Key
+      - name: Set up SSH Key
+        run: |
+          printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
-      # Step 4: Pull Latest Docker Image
+      # Step 3: Pull Latest Docker Image
       - name: Pull Latest Docker Image
         run: |
           doctl compute ssh <your-droplet-id> --ssh-key-path ~/.ssh/id_rsa -- \
           'docker pull tanmaysinghx/ts-auth-service-1625:latest'
           
-      # Step 5: Restart Docker Container
+      # Step 4: Restart Docker Container
       - name: Restart Docker Container
         run: |
           doctl compute ssh <your-droplet-id> --ssh-key-path ~/.ssh/id_rsa -- \
