@@ -75,4 +75,4 @@ jobs:
         run: |
           doctl compute ssh 449640053 --ssh-key-path ~/.ssh/id_rsa -- \
           'docker rm -f ts-auth-service-1625 || true && \
-           docker run -d -p 8080:8080 --name ts-auth-service-1625 tanmaysinghx/ts-auth-service-1625:latest'
+           docker run -d -p 8080:8080 --name ts-auth-service-1625 tanmaysinghx/ts-auth-service-1625:latest' -o StrictHostKeyChecking=no
