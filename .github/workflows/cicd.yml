@@ -54,24 +54,17 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Set up SSH agent
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Set up doctl
+        run: |
+          echo "${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" | doctl auth init -t
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v0.1.7
-        with:
-          host: ${{ secrets.DROPLET_IP }}
-          username: root
-          port: 22
-          script: |
-            # Step 2: Pull latest Docker image from Docker Hub
-            docker pull tanmaysinghx/ts-auth-service-1625:latest
-            
-            # Step 3: Stop and remove any existing container
-            docker rm -f ts-auth-service-1625 || true
-            
-            # Step 4: Run the new container
-            docker run -d -p 8080:8080 --name ts-auth-service-1625 tanmaysinghx/ts-auth-service-1625:latest
-          debug: true  # Enable debug output for troubleshooting
+      - name: Pull Latest Docker Image
+        run: |
+          doctl compute ssh 449640053 --ssh-key-path --ssh-key-path ~/.ssh/id_rsa -- \
+          'docker pull tanmaysinghx/ts-auth-service-1625:latest'
+          
+      - name: Restart Docker Container
+        run: |
+          doctl compute ssh 449640053 --ssh-key-path <path-to-your-ssh-key> -- \
+          'docker rm -f ts-auth-service-1625 || true && \
+           docker run -d -p 8080:8080 --name ts-auth-service-1625 tanmaysinghx/ts-auth-service-1625:latest'
