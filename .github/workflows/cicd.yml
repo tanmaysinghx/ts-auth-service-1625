@@ -59,7 +59,7 @@ jobs:
         with:
           host: ${{ secrets.DROPLET_IP }}
           username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCFkSM0GR+xBeTQV2nafwVSnGybYkJxsz6YYrJMS/5eLyRmi2bZ1QaTgrCdMp9aYf1NLk/r12nYwjGg7FhlpqD6sAfBfIhloCnDDecGHiU5yjeCIOgExfhvI/t/sFXbGF5xdOU4/NXhSybLd5iqKJpYGpW61sxQr2xk2NBC7l3N64TuRyxy7vOJBgJs09mLXtg0VXIWEWRTmVx66yR5e3kkqoN6FKC1WnZsxtXRoSMYldoNte/pPX4f2FAlrPvL/s+9/alGSDWRdyu0EW9Idq4I6eTu1kn9HdAt3QsbzxFV0gSv7EbQ6J+OnKffDMn9emov2hDCfzuY/2iy3XHhMvGh rsa-key-20241006
           port: 22
           script: |
             # Step 2: Pull latest Docker image from Docker Hub
