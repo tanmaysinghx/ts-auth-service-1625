@@ -67,12 +67,12 @@ jobs:
       # Step 3: Pull Latest Docker Image
       - name: Pull Latest Docker Image
         run: |
-          doctl compute ssh <your-droplet-id> --ssh-key-path ~/.ssh/id_rsa -- \
+          doctl compute ssh 449640053 --ssh-key-path ~/.ssh/id_rsa -- \
           'docker pull tanmaysinghx/ts-auth-service-1625:latest'
           
       # Step 4: Restart Docker Container
       - name: Restart Docker Container
         run: |
-          doctl compute ssh <your-droplet-id> --ssh-key-path ~/.ssh/id_rsa -- \
+          doctl compute ssh 449640053 --ssh-key-path ~/.ssh/id_rsa -- \
           'docker rm -f ts-auth-service-1625 || true && \
            docker run -d -p 8080:8080 --name ts-auth-service-1625 tanmaysinghx/ts-auth-service-1625:latest'
