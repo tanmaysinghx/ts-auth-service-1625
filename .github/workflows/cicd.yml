@@ -51,20 +51,27 @@ jobs:
     needs: build
     runs-on: ubuntu-latest # If using DigitalOcean or another server, make sure to adjust this appropriately.
     steps:
-      # Step 1: SSH into the Droplet/Server (DigitalOcean, AWS, etc.)
-      - name: SSH into Droplet
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.DROPLET_IP }}
           username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
             # Step 2: Pull latest Docker image from Docker Hub
             docker pull tanmaysinghx/ts-auth-service-1625:latest
-
+            
             # Step 3: Stop and remove any existing container
             docker rm -f ts-auth-service-1625 || true
-
+            
             # Step 4: Run the new container
             docker run -d -p 8080:8080 --name ts-auth-service-1625 tanmaysinghx/ts-auth-service-1625:latest
+          debug: true  # Enable debug output for troubleshooting
