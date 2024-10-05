@@ -7,8 +7,8 @@ WORKDIR /usr/src/app
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies (production-only, to reduce image size)
+RUN npm install --production
 
 # Copy the rest of your application code
 COPY . .
@@ -21,3 +21,4 @@ EXPOSE 1625
 
 # Start the application
 CMD ["npm", "start"]
+
