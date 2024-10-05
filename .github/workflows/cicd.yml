@@ -61,11 +61,11 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      # Step 3: Set up SSH Key
-      - name: Set up SSH Key
-        run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+       # Step 3: Set up SSH Key
+    - name: Set up SSH Key
+      run: |
+        printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
 
       # Step 4: Pull Latest Docker Image
       - name: Pull Latest Docker Image
