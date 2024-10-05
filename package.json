@@ -10,7 +10,8 @@
     "development": "ts-node-dev --respawn --transpile-only src/server.ts",
     "seed": "ts-node src/config/seed.ts",
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc && npx prisma generate"
   },
   "keywords": [],
   "author": "",

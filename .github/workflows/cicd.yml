@@ -1,60 +1,70 @@
-name: Build, Test, and Deploy Docker Image
+name: CICD
 
 on:
   push:
     branches:
-      - dev-deployment
-      - uat-deployment
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      # Step 1: Checkout the code
-      - name: Checkout code
-        uses: actions/checkout@v2
+      # Step 1: Checkout source code
+      - name: Checkout source
+        uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js
-      - name: Set up Node.js
+      # Step 2: Setup Node.js environment
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: "18"
 
-      # Step 3: Install dependencies
+      # Step 3: Cache Node.js modules
+      - name: Cache Node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
+      # Step 4: Install dependencies and build the project
       - name: Install dependencies
         run: npm install
 
-      # # Step 4: Run linting
-      # - name: Run ESLint
-      #   run: npm run lint
+      - name: Build the project
+        run: npm run build
 
-      # # Step 5: Run tests
-      # - name: Run tests
-      #   run: npm test
+      # Step 5: Login to Docker Hub
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      # Step 6: Set up Docker Buildx
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      # Step 7: Log in to Docker Hub
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      # Step 8: Build Docker image
+      # Step 6: Build Docker image
       - name: Build Docker image
-        run: |
-          docker build -t tanmaysinghx/ts-auth-service-1625:latest .
+        run: docker build -t tanmaysinghx/ts-auth-service-1625:latest .
 
-      # Step 9: Push Docker image to Docker Hub
+      # Step 7: Publish Docker image to Docker Hub
       - name: Push Docker image
-        run: |
-          docker push tanmaysinghx/ts-auth-service-1625:latest
+        run: docker push tanmaysinghx/ts-auth-service-1625:latest
 
-      # Step 10: Notify success (optional)
-      - name: Notify success
-        if: success()
-        run: echo "Docker image built and pushed successfully!"
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest # If using DigitalOcean or another server, make sure to adjust this appropriately.
+    steps:
+      # Step 1: SSH into the Droplet/Server (DigitalOcean, AWS, etc.)
+      - name: SSH into Droplet
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            # Step 2: Pull latest Docker image from Docker Hub
+            docker pull tanmaysinghx/ts-auth-service-1625:latest
+
+            # Step 3: Stop and remove any existing container
+            docker rm -f ts-auth-service-1625 || true
+
+            # Step 4: Run the new container
+            docker run -d -p 8080:8080 --name ts-auth-service-1625 tanmaysinghx/ts-auth-service-1625:latest
