@@ -13,29 +13,69 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v3
 
+      # Step 2: Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      # Step 3: Cache Node.js modules
+      - name: Cache Node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
+      # Step 4: Install dependencies and build the project
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the project
+        run: npm run build
+
+      # Step 5: Login to Docker Hub
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      # Step 6: Build Docker image
+      - name: Build Docker image
+        run: docker build -t tanmaysinghx/ts-auth-service-1625:latest .
+
+      # Step 7: Publish Docker image to Docker Hub
+      - name: Push Docker image
+        run: docker push tanmaysinghx/ts-auth-service-1625:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build  # Ensure this job runs after the build job
+    steps:
+      # Step 1: Checkout source code (optional, can be removed)
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      # Step 2: Install doctl
       - name: Install doctl
-        run: |
-          # Download doctl and make it executable
-          curl -sSL https://github.com/digitalocean/doctl/releases/latest/download/doctl-$(uname -s)-$(uname -m).tar.gz | tar xz
-          sudo mv doctl /usr/local/bin
-          sudo chmod +x /usr/local/bin/doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Authenticate doctl
-        run: |
-          echo "${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}" | doctl auth init -t
-
+      # Step 3: Set up SSH Key
       - name: Set up SSH Key
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
+      # Step 4: Pull Latest Docker Image
       - name: Pull Latest Docker Image
         run: |
-          doctl compute ssh 449640053 --ssh-key-path ~/.ssh/id_rsa -- \
+          doctl compute ssh <your-droplet-id> --ssh-key-path ~/.ssh/id_rsa -- \
           'docker pull tanmaysinghx/ts-auth-service-1625:latest'
           
+      # Step 5: Restart Docker Container
       - name: Restart Docker Container
         run: |
-          doctl compute ssh 449640053 --ssh-key-path ~/.ssh/id_rsa -- \
+          doctl compute ssh <your-droplet-id> --ssh-key-path ~/.ssh/id_rsa -- \
           'docker rm -f ts-auth-service-1625 || true && \
            docker run -d -p 8080:8080 --name ts-auth-service-1625 tanmaysinghx/ts-auth-service-1625:latest'
