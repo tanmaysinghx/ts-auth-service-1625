@@ -60,6 +60,7 @@ jobs:
       # Step 2: Set up SSH Key
       - name: Set up SSH Key
         run: |
+          mkdir -p ~/.ssh  # Create the .ssh directory if it doesn't exist
           printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
