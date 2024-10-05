@@ -48,11 +48,13 @@ jobs:
         run: docker push tanmaysinghx/ts-auth-service-1625:latest
 
   deploy:
-    needs: build
-    runs-on: ubuntu-latest # If using DigitalOcean or another server, make sure to adjust this appropriately.
+    runs-on: ubuntu-latest
+
     steps:
-      # Step 1: SSH into the Droplet/Server (DigitalOcean, AWS, etc.)
-      - name: SSH into Droplet
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.DROPLET_IP }}
@@ -68,3 +70,4 @@ jobs:
 
             # Step 4: Run the new container
             docker run -d -p 8080:8080 --name ts-auth-service-1625 tanmaysinghx/ts-auth-service-1625:latest
+          debug: true # Optional: Set this to true for debugging output
