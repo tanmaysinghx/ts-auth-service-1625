@@ -26,7 +26,7 @@ model Role {
 }
 
 model Audit {
-  id             String   @id @default(uuid()) @db.VarChar(36) // UUIDs are 36 characters long
+  id             String   @id @default(uuid()) @db.VarChar(255) // UUIDs are 36 characters long
   userId         String   @db.VarChar(36) // Ensure length is sufficient for UUIDs
   roleId         String   @db.VarChar(36) // Ensure length is sufficient for UUIDs
   email          String   @db.VarChar(255)
