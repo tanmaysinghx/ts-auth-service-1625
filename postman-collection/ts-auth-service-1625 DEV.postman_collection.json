@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "3f36b404-41cb-4fdc-9d10-5a1f352105ef",
-		"name": "ts-auth-service-1625",
+		"name": "ts-auth-service-1625 DEV",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "15979674"
 	},
@@ -44,7 +44,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"email\": \"user1@gmail.com\",\r\n  \"password\": \"password\"\r\n}\r\n",
+					"raw": "{\r\n  \"email\": \"superuser@gmail.com\",\r\n  \"password\": \"password\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -264,6 +264,28 @@
 						"api",
 						"logs",
 						"getAllLogs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:1625/v2/api/health/health-check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1625",
+					"path": [
+						"v2",
+						"api",
+						"health",
+						"health-check"
 					]
 				}
 			},
