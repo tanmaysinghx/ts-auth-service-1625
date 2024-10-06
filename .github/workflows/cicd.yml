@@ -65,7 +65,8 @@ jobs:
       # Step 3: Add Droplet IP to known hosts (to avoid Host key verification error)
       - name: Add Droplet to known hosts
         run: |
-          ssh-keyscan -H ${{ secrets.DROPLET_IP }} >> ~/.ssh/known_hosts
+          sudo mkdir -p ~/.ssh  # Ensure .ssh directory exists with proper permissions
+          sudo ssh-keyscan -H ${{ secrets.DROPLET_IP }} >> ~/.ssh/known_hosts
 
       # Step 4: SSH into Droplet and Pull Latest Docker Image
       - name: Pull Latest Docker Image
