@@ -51,23 +51,31 @@ jobs:
     runs-on: ubuntu-latest
     needs: build  # Ensure this job runs after the build job
     steps:
-      # Step 1: Install doctl
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      # Step 1: Checkout source code (optional)
+      - name: Checkout source
+        uses: actions/checkout@v3
 
-      # Step 2: Set up SSH Key
+      # Step 2: Set up SSH Key and Configure SSH for the Runner
       - name: Set up SSH Key
         run: |
-          mkdir -p ~/.ssh  # Create the .ssh directory if it doesn't exist
-          printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          mkdir -p ~/.ssh  # Ensure .ssh directory exists
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      # Step 3: Pull Latest Docker Image
+      # Step 3: Add Droplet IP to known hosts (to avoid Host key verification error)
+      - name: Add Droplet to known hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.DROPLET_IP }} >> ~/.ssh/known_hosts
+
+      # Step 4: SSH into Droplet and Pull Latest Docker Image
       - name: Pull Latest Docker Image
         run: |
-          doctl compute ssh 449640053 --ssh-key-path ~/.ssh/id_rsa -- \
-          'ssh -o StrictHostKeyChecking=no root@localhost "docker pull tanmaysinghx/ts-auth-service-1625:latest"'
+          ssh -i ~/.ssh/id_rsa root@${{ secrets.DROPLET_IP }} \
+          'docker pull tanmaysinghx/ts-auth-service-1625:latest'
 
-  
+      # Step 5: Restart Docker Container on Droplet
+      - name: Restart Docker Container
+        run: |
+          ssh -i ~/.ssh/id_rsa root@${{ secrets.DROPLET_IP }} \
+          'docker rm -f ts-auth-service-1625 || true && \
+           docker run -d -p 8080:8080 --name ts-auth-service-1625 tanmaysinghx/ts-auth-service-1625:latest'
