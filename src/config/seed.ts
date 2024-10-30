@@ -2,11 +2,12 @@ import prisma from "./db";
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import dotenv from 'dotenv';
+import logger from "../utils/logger";
 dotenv.config();
 
+/* Function needed to seed intial data to DB */
 async function main() {
-  console.log("Database URL:", process.env.DATABASE_URL);
-
+  logger.info("Database URL:", process.env.DATABASE_URL);
   await prisma.role.createMany({
     data: [
       { id: '0001', roleName: 'superuser' },
@@ -21,15 +22,41 @@ async function main() {
       { id: '0010', roleName: 'developer' },
     ]
   });
-
   const hashedPassword = await bcrypt.hash("password", 10);
-  await prisma.user.create({
-    data: {
-      id: uuidv4().slice(0, 8),
-      email: "superuser@gmail.com",
-      password: hashedPassword,
-      roleId: "0001"
-    },
+  await prisma.user.createMany({
+    data: [
+      {
+        id: uuidv4().slice(0, 8),
+        email: "superuser@gmail.com",
+        password: hashedPassword,
+        roleId: "0001"
+      },
+      {
+        id: uuidv4().slice(0, 8),
+        email: "admin@gmail.com",
+        password: hashedPassword,
+        roleId: "0002"
+      },
+
+      {
+        id: uuidv4().slice(0, 8),
+        email: "user@gmail.com",
+        password: hashedPassword,
+        roleId: "0005"
+      },
+      {
+        id: uuidv4().slice(0, 8),
+        email: "guest@gmail.com",
+        password: hashedPassword,
+        roleId: "0006"
+      },
+      {
+        id: uuidv4().slice(0, 8),
+        email: "developer@gmail.com",
+        password: hashedPassword,
+        roleId: "0010"
+      },
+    ]
   });
 }
 
@@ -40,5 +67,5 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
-    console.log("Data has been seeded succesfully !!!")
+    logger.info("Data has been seeded successfully!");
   });

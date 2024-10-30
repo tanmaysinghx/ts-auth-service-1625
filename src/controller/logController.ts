@@ -6,6 +6,7 @@ interface CustomRequest extends Request {
   transactionId?: string;
 }
 
+/* Controller to get all logs for this application  */
 export const getLogs = async (req: CustomRequest, res: Response) => {
   const transactionId = req.transactionId;
   try {

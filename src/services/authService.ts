@@ -5,6 +5,7 @@ import { hashPassword, comparePassword } from '../utils/hashPassword';
 import { generateAccessToken, generateRefreshToken } from '../utils/generateTokens';
 import { logAudit } from '../utils/auditLogger';
 
+/* Function to register new user */
 export const registerUser = async (data: { email: string; password: string; roleName: string }) => {
   const { email, password, roleName } = data;
   if (!email || !password || !roleName) {
@@ -35,6 +36,7 @@ export const registerUser = async (data: { email: string; password: string; role
   return user;
 };
 
+/* Function to login user */
 export const loginUser = async (data: { email: string; password: string }) => {
   const { email, password } = data;
   const user = await prisma.user.findUnique({ where: { email } });
@@ -51,6 +53,7 @@ export const loginUser = async (data: { email: string; password: string }) => {
   return { accessToken, refreshToken, email, roleId, roleName };
 };
 
+/* Function to change user password */
 export const changePasswordService = async (data: { email: string; currentPassword: string; newPassword: string }) => {
   const { email, currentPassword, newPassword } = data;
   const user = await prisma.user.findUnique({ where: { email } });
@@ -74,6 +77,7 @@ export const changePasswordService = async (data: { email: string; currentPasswo
   return 'Password updated successfully';
 };
 
+/* Function to generate jwt token using refresh token */
 export const refreshToken = async (refreshToken: string) => {
   if (!refreshToken) {
     throw new Error('Refresh token is required');
@@ -97,6 +101,7 @@ export const refreshToken = async (refreshToken: string) => {
   }
 };
 
+/* Function to verify jwt token */
 export const verifyTokenService = async (token: string) => {
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!);

@@ -6,6 +6,7 @@ interface CustomRequest extends Request {
   transactionId?: string;
 }
 
+/* Controller to register user */
 export const register = async (req: CustomRequest, res: Response) => {
   const transactionId = req.transactionId;
   try {
@@ -17,6 +18,7 @@ export const register = async (req: CustomRequest, res: Response) => {
   }
 };
 
+/* Controller to login user */
 export const login = async (req: CustomRequest, res: Response) => {
   const transactionId = req.transactionId;
   try {
@@ -28,6 +30,7 @@ export const login = async (req: CustomRequest, res: Response) => {
   }
 };
 
+/* Controller to change user password */
 export const changePasswordController = async (req: CustomRequest, res: Response) => {
   const transactionId = req.transactionId;
   try {
@@ -39,6 +42,7 @@ export const changePasswordController = async (req: CustomRequest, res: Response
   }
 };
 
+/* Controller to generate jwt token using refresh token */
 export const handleRefreshToken = async (req: CustomRequest, res: Response) => {
   const transactionId = req.transactionId;
   try {
@@ -50,6 +54,7 @@ export const handleRefreshToken = async (req: CustomRequest, res: Response) => {
   }
 };
 
+/* Controller to verify user token */
 export const verifyTokenController = async (req: CustomRequest, res: Response) => {
   const transactionId = req.transactionId;
   try {

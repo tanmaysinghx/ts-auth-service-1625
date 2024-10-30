@@ -26,9 +26,9 @@ model Role {
 }
 
 model Audit {
-  id             String   @id @default(uuid()) @db.VarChar(255) // UUIDs are 36 characters long
-  userId         String   @db.VarChar(36) // Ensure length is sufficient for UUIDs
-  roleId         String   @db.VarChar(36) // Ensure length is sufficient for UUIDs
+  id             String   @id @default(uuid()) @db.VarChar(255) 
+  userId         String   @db.VarChar(36) 
+  roleId         String   @db.VarChar(36) 
   email          String   @db.VarChar(255)
   operation      String   @db.VarChar(255)
   createdAt      DateTime @default(now())
@@ -41,5 +41,6 @@ model Otp {
   otp       String
   expiry    DateTime
   createdAt DateTime @default(now())
+  attempts  Int      @default(0)
 }
 

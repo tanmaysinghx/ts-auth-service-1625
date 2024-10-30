@@ -1,20 +1,33 @@
 import { Request, Response } from 'express';
 import { generateAndSendOTP, verifyOTP } from '../services/otpService';
+import { errorResponse, successResponse } from '../utils/responseUtils';
 
-export const requestOTP = async (req: Request, res: Response) => {
-    const { email } = req.body;
-    if (!email) return res.status(400).json({ error: 'Email is required' });
+interface CustomRequest extends Request {
+  transactionId?: string;
+}
 
-    await generateAndSendOTP(email);
-    return res.status(200).json({ message: 'OTP sent successfully' });
+/* Controller to generate OTP */
+export const requestOTPController = async (req: CustomRequest, res: Response) => {
+  const transactionId = req.transactionId;
+  const { email } = req.body;
+  const result = await generateAndSendOTP(email);
+  if (result.success) {
+    return res.status(200).json(successResponse(result.message, "OTP generated successfully for " + email, transactionId));
+  } else {
+    return res.status(400).json(errorResponse(result.message, "OTP generation failed", transactionId));
+  }
 };
 
-export const verifyOTPController = async (req: Request, res: Response) => {
-    const { email, otp } = req.body;
-    if (!email || !otp) return res.status(400).json({ error: 'Email and OTP are required' });
-
-    const isValid = verifyOTP(email, otp);
-    if (!isValid) return res.status(400).json({ error: 'Invalid or expired OTP' });
-
-    return res.status(200).json({ message: 'OTP verified successfully' });
+/* Controller to verify OTP */
+export const verifyOTPController = async (req: CustomRequest, res: Response) => {
+  const transactionId = req.transactionId;
+  const { email, otp } = req.body;
+  if (!email || !otp) {
+    return res.status(400).json({ error: 'Email and OTP are required' });
+  }
+  const { valid, message } = await verifyOTP(email, otp);
+  if (!valid) {
+    return res.status(400).json({ error: message });
+  }
+  return res.status(200).json(successResponse(null, "OTP verified successfully for " + email, transactionId));
 };
