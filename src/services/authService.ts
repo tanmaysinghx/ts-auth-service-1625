@@ -4,6 +4,7 @@ import prisma from '../config/db';
 import { hashPassword, comparePassword } from '../utils/hashPassword';
 import { generateAccessToken, generateRefreshToken } from '../utils/generateTokens';
 import { logAudit } from '../utils/auditLogger';
+import { sendWelcomeEmail } from '../utils/emailTransport';
 
 /* Function to register new user */
 export const registerUser = async (data: { email: string; password: string; roleName: string }) => {
@@ -33,6 +34,7 @@ export const registerUser = async (data: { email: string; password: string; role
     },
   });
   await logAudit(user.email, 'register', user.id, user.roleId);
+  await sendWelcomeEmail(email, getUsernameFromEmail(email)); 
   return user;
 };
 
@@ -112,4 +114,9 @@ export const verifyTokenService = async (token: string) => {
   } catch (error) {
     throw new Error('Invalid or expired token');
   }
+};
+
+/* Function to extract username from email */
+const getUsernameFromEmail = (email: string) => {
+  return email.split('@')[0];
 };

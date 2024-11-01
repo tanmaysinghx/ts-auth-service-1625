@@ -1,2 +1,3 @@
 # Ignore nodejs modules
 node_modules/
+combined.log

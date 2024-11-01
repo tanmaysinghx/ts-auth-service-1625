@@ -2,8 +2,6 @@ import app from './app';
 import dotenv from 'dotenv';
 import { connectToDatabase } from './config/db';
 import logger from './utils/logger';
-import fs from 'fs';
-import https from 'https';
 
 dotenv.config();
 

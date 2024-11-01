@@ -49,7 +49,7 @@ export const generateAndSendOTP = async (email: string) => {
         attempts: attemptsCount + 1,
       },
     });
-    // await sendOTPEmail(email, otp);
+    await sendOTPEmail(email, otp);
     return { success: true, message: 'OTP generated successfully.' };
   } catch (error) {
     console.error("Error generating OTP:", error);
