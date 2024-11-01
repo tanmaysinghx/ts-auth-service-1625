@@ -52,7 +52,8 @@ export const loginUser = async (data: { email: string; password: string }) => {
   let roleId = user?.roleId;
   const role = await prisma.role.findUnique({ where: { id: roleId } });
   let roleName = role?.roleName;
-  return { accessToken, refreshToken, email, roleId, roleName };
+  let userId = user?.id;
+  return { accessToken, refreshToken, email, roleId, roleName, userId };
 };
 
 /* Function to change user password */
