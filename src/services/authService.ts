@@ -41,7 +41,7 @@ export const loginUser = async (data: { email: string; password: string }) => {
   if (!user) throw new Error('User not found');
   const isValid = await comparePassword(password, user.password);
   if (!isValid) throw new Error('Invalid credentials');
-  const accessToken = generateAccessToken(user.id, user.roleId);
+  const accessToken = generateAccessToken(user.id, user.roleId, user.email);
   const refreshToken = generateRefreshToken(user.id);
   await prisma.user.update({ where: { email }, data: { lastLoginAt: new Date() } });
   let roleId = user?.roleId;
