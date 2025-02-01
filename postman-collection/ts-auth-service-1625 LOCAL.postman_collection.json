@@ -1,0 +1,118 @@
+{
+	"info": {
+		"_postman_id": "3f36b404-41cb-4fdc-9d10-5a1f352105ef",
+		"name": "ts-auth-service-1625 LOCAL",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "15979674"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"tanmaysinghx95@gmail.com\",\r\n  \"password\": \"password\",\r\n  \"roleName\": \"user\" \r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:1625/v2/api/auth/register"
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"superuser@gmail.com\",\r\n  \"password\": \"Tanmay@1999\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:1625/v2/api/auth/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Change Password",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OTM5MmZjMSIsInJvbGVJZCI6IjAwMDEiLCJpYXQiOjE3MjU3MzA1NDMsImV4cCI6MTcyNTczMTQ0M30.Nx5xr6gbRL2txHgIwSSC8JRliGcw0-AUbdwoI6Jkhtg"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"superuser@gmail.com\",\r\n  \"currentPassword\": \"password\",\r\n  \"newPassword\": \"Tanmay@1999\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:1625/v2/api/auth/change-password"
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5MGQ0NTQxZiIsImlhdCI6MTczODQwOTUzNSwiZXhwIjoxNzM5MDE0MzM1fQ.jkBXVXvLvtlKUQyV_XDACig0J94wZa795XGr8yzNsCE\" \r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:1625/v2/api/auth/refresh-token"
+			},
+			"response": []
+		},
+		{
+			"name": "Verify Token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5MGQ0NTQxZiIsInJvbGVJZCI6IjAwMDEiLCJpYXQiOjE3Mzg0MDk1MzUsImV4cCI6MTczODQxMDQzNX0.fqkh365fSdvZ4iscjwECUp99drwWwWG0kbiFg8sfcFY\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:1625/v2/api/auth/verify/verify-token"
+			},
+			"response": []
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:1625/v2/api/health/health-check"
+			},
+			"response": []
+		}
+	]
+}

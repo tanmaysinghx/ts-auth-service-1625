@@ -3,8 +3,6 @@ import jwt from 'jsonwebtoken';
 import prisma from '../config/db';
 import { hashPassword, comparePassword } from '../utils/hashPassword';
 import { generateAccessToken, generateRefreshToken } from '../utils/generateTokens';
-import { logAudit } from '../utils/auditLogger';
-import { sendWelcomeEmail } from '../utils/emailTransport';
 
 /* Function to register new user */
 export const registerUser = async (data: { email: string; password: string; roleName: string }) => {
@@ -33,8 +31,6 @@ export const registerUser = async (data: { email: string; password: string; role
       roleId: role.id,
     },
   });
-  await logAudit(user.email, 'register', user.id, user.roleId);
-  await sendWelcomeEmail(email, getUsernameFromEmail(email)); 
   return user;
 };
 
@@ -48,7 +44,6 @@ export const loginUser = async (data: { email: string; password: string }) => {
   const accessToken = generateAccessToken(user.id, user.roleId);
   const refreshToken = generateRefreshToken(user.id);
   await prisma.user.update({ where: { email }, data: { lastLoginAt: new Date() } });
-  logAudit(user.email, 'login', user.id, user.roleId);
   let roleId = user?.roleId;
   const role = await prisma.role.findUnique({ where: { id: roleId } });
   let roleName = role?.roleName;
@@ -76,7 +71,6 @@ export const changePasswordService = async (data: { email: string; currentPasswo
     where: { email },
     data: { password: hashedNewPassword, updatedAt: new Date() },
   });
-  await logAudit(email, 'change-password', user.id, user.roleId);
   return 'Password updated successfully';
 };
 

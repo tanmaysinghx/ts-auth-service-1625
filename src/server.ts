@@ -5,7 +5,7 @@ import logger from './utils/logger';
 
 dotenv.config();
 
-const PORT = process.env.PORT || 1625;
+const PORT = process?.env?.PORT ?? 1625;
 
 app.listen(PORT, async () => {
   logger.info(`Server is running on port: ${PORT}`);

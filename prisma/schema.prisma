@@ -24,23 +24,3 @@ model Role {
   users     User[]
   createdAt DateTime @default(now())
 }
-
-model Audit {
-  id             String   @id @default(uuid()) @db.VarChar(255) 
-  userId         String   @db.VarChar(36) 
-  roleId         String   @db.VarChar(36) 
-  email          String   @db.VarChar(255)
-  operation      String   @db.VarChar(255)
-  createdAt      DateTime @default(now())
-  userIpAddress  String   @db.VarChar(45)
-}
-
-model Otp {
-  id        String   @id @default(cuid())
-  email     String
-  otp       String
-  expiry    DateTime
-  createdAt DateTime @default(now())
-  attempts  Int      @default(0)
-}
-
