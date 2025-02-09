@@ -200,7 +200,7 @@ npx prisma migrate dev --name add_otp_table
 
 ```bash
 {
-  "email": "testSuperuser8@gmail.com",
+  "email": "testSuperuser@gmail.com",
   "currentPassword": "password",
   "newPassword": "passwordnew"
 }
