@@ -4,8 +4,10 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "windows", "debian-openssl-3.0.x"]
 }
+
 
 model User {
   id                 String   @id @default(uuid()) @db.VarChar(8)

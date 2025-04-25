@@ -1,5 +1,5 @@
 import prisma from "./db";
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import dotenv from 'dotenv';
 import logger from "../utils/logger";

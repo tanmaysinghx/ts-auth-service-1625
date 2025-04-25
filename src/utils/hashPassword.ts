@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 export const hashPassword = async (password: string) => {
   const saltRounds = 10; // You can adjust this value depending on security requirements
