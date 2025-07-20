@@ -5,6 +5,7 @@ import healthCheckRoutes from './routes/healthCheckRoutes'
 import { transactionIdMiddleware } from './middleware/transactionIdMiddleware';
 import cors from 'cors';
 import { loggerConsole } from './middleware/loggerConsole';
+import { validateRegisterData } from './utils/validator';
 
 const app = express();
 
@@ -20,7 +21,7 @@ app.use(cors({
 app.use(express.json());
 app.use(loggerConsole);
 
-app.use('/v2/api/auth', authRoutes);
+app.use('/v2/api/auth', validateRegisterData, authRoutes);
 app.use('/v2/api/roles', roleRoutes);
 app.use('/v2/api/health', healthCheckRoutes);
 
