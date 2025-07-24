@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import logger from '../utils/logger';
-import { env } from 'process';
 
 const prisma = new PrismaClient();
 
@@ -9,7 +8,7 @@ export default prisma;
 /* Function to verfiy DB connection is successfull or not */
 export const connectToDatabase = async () => {
   try {
-    console.log("Connecting to the database...", env.DB_URL);
+    console.log("Connecting to the database...", process?.env?.DATABASE_URL);
     await prisma.$connect();
     logger.info('Database connected successfully');
   } catch (error) {
