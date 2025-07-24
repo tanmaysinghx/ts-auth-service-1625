@@ -9,6 +9,7 @@ COPY package*.json ./
 
 # Install dependencies (production-only, to reduce image size)
 RUN npm install --production
+RUN npm install --save-dev @types/cors
 
 # Copy the rest of your application code
 COPY . .
