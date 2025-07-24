@@ -8,7 +8,6 @@ export default prisma;
 /* Function to verfiy DB connection is successfull or not */
 export const connectToDatabase = async () => {
   try {
-    console.log("Connecting to the database...", process?.env?.DATABASE_URL);
     await prisma.$connect();
     logger.info('Database connected successfully');
   } catch (error) {
