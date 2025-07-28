@@ -19,7 +19,7 @@ export const register = async (req: CustomRequest, res: Response) => {
 };
 
 /* Controller to login user */
-export const login = async (req: CustomRequest, res: Response) => {
+export const login = async (req: CustomRequest, res: Response): Promise<Response> => {
   const transactionId = req.transactionId;
   try {
     const tokens = await loginUser(req.body);
