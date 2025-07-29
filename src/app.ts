@@ -5,10 +5,9 @@ import healthCheckRoutes from './routes/healthCheckRoutes'
 import { transactionIdMiddleware } from './middleware/transactionIdMiddleware';
 import cors from 'cors';
 import { loggerConsole } from './middleware/loggerConsole';
+import cookieParser from 'cookie-parser';
 
 const app = express();
-
-app.use(transactionIdMiddleware);
 
 app.use(cors({
   origin: '*',
@@ -17,11 +16,15 @@ app.use(cors({
   credentials: true,
 }));
 
+app.use(transactionIdMiddleware);
 app.use(express.json());
 app.use(loggerConsole);
+app.use(cookieParser());
 
-app.use('/v2/api/auth', authRoutes);
-app.use('/v2/api/roles', roleRoutes);
-app.use('/v2/api/health', healthCheckRoutes);
+const version = process.env.API_VERSION || 'v2';
+
+app.use(`/${version}/api/auth`, authRoutes);
+app.use(`/${version}/api/roles`, roleRoutes);
+app.use(`/${version}/api/health`, healthCheckRoutes);
 
 export default app;

@@ -23,6 +23,8 @@ export const login = async (req: CustomRequest, res: Response): Promise<Response
   const transactionId = req.transactionId;
   try {
     const tokens = await loginUser(req.body);
+    const { refreshToken, accessToken, email } = tokens;
+    setCookies(res, refreshToken, accessToken, email);
     return res.status(201).json(successResponse(tokens, "User is successfully loggedin", transactionId));
   } catch (err: any) {
     const errorMessage = err?.message || 'Login failed';
@@ -64,5 +66,24 @@ export const verifyTokenController = async (req: CustomRequest, res: Response) =
   } catch (error: any) {
     const errorMessage = 'Invalid jwt token';
     return res.status(403).json(errorResponse(errorMessage, "Refresh token error", transactionId,));
+  }
+};
+
+const setCookies = (res: Response, refreshToken: string, accessToken?: string, email?: string) => {
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'none', // maybe 'lax' or 'none' if cross-site, set with caution
+    path: '/',
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+  if (accessToken) {
+    res.cookie('accessToken', accessToken, {
+      httpOnly: false, // If client needs JS access
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
+      path: '/',
+      maxAge: 15 * 60 * 1000, // e.g., 15 mins for access token
+    });
   }
 };

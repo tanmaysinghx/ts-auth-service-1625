@@ -6,7 +6,6 @@ const ALLOWED_ROLES = ['superuser', 'admin', 'editor', 'viewer', 'user', 'guest'
 export const validateRegisterData = (req: Request, res: Response, next: NextFunction) => {
     let { email, password, roleName } = req.body;
 
-    // Basic presence check
     if (!email || !password || !roleName) {
         return res.status(400).json({ message: "Email, password, and roleName are required" });
     }
@@ -45,3 +44,19 @@ export const validateRegisterData = (req: Request, res: Response, next: NextFunc
 
     next();
 };
+
+export const validateLoginData = (req: Request, res: Response, next: NextFunction) => {
+    let { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required" });
+    }
+
+    email = validator.trim(email);
+    email = validator.normalizeEmail(email) || '';
+    if (!validator.isEmail(email)) {
+        return res.status(400).json({ message: "Email is not valid" });
+    }
+
+    next();
+}
