@@ -1,35 +1,38 @@
 # Use official Node.js 18 image
 FROM node:18
 
-# Set working directory inside container
+# Set working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy package manifests
+# Copy package manifests first for better caching
 COPY package*.json ./
 
-# Install dependencies (prod and dev in one step for better caching in dev)
+# Install dependencies (prod + dev for development stage)
 RUN npm install
 
-# Copy the rest of your app
+# Copy the rest of your application code
 COPY . .
 
-# Copy CA cert into a standard path
+# ✅ Copy .env so Prisma can read DATABASE_URL and other vars
+COPY .env ./
+
+# ✅ Copy CA cert into system-wide trusted certs directory
 COPY certs/ca.pem /usr/local/share/ca-certificates/ca.pem
 
-# Update CA certificates system-wide
+# ✅ Update system to trust the CA cert (Debian/Ubuntu base)
 RUN update-ca-certificates
 
-# Export CA cert to Node.js
+# ✅ Export CA cert to Node.js explicitly (optional but recommended)
 ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/ca.pem
 
-# ✅ Prisma debug logging
+# ✅ Enable Prisma debug logs
 ENV DEBUG=prisma*
 
-# Make sure entrypoint script is executable
+# ✅ Make entrypoint script executable
 RUN chmod +x docker-entrypoint.sh
 
-# Expose the app port
+# Expose your application port
 EXPOSE 1625
 
-# Set entrypoint
+# ✅ Run entrypoint script (which can run migrations, generate client, then start app)
 ENTRYPOINT ["./docker-entrypoint.sh"]
