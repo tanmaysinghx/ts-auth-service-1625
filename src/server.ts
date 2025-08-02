@@ -10,7 +10,7 @@ const PORT = process?.env?.PORT ?? 1625;
 app.listen(PORT, async () => {
   logger.info(`Server is running on port: ${PORT}`);
   try {
-    //await connectToDatabase();
+    await connectToDatabase();
     logger.info('Database connection successful');
   } catch (error) {
     if (error instanceof Error) {
