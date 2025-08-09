@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies (production-only, to reduce image size)
-RUN npm install --production
+RUN npm install
 
 # Copy the rest of your application code
 COPY . .
@@ -20,4 +20,4 @@ RUN npx prisma generate
 EXPOSE 1625
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
