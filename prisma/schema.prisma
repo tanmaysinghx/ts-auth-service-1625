@@ -18,6 +18,7 @@ model User {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
   lastLoginAt        DateTime?
+  sessions    Session[]
 }
 
 model Role {
@@ -25,4 +26,66 @@ model Role {
   roleName  String   @unique @db.VarChar(50)
   users     User[]
   createdAt DateTime @default(now())
+}
+
+model billing {
+  billing_id   String  @id @db.VarChar(255)
+  billing_code String? @db.VarChar(255)
+  description  String? @db.VarChar(255)
+}
+
+model group_table {
+  group_id    String  @id @db.VarChar(255)
+  group_name  String? @db.VarChar(255)
+  group_owner String? @db.VarChar(255)
+}
+
+model project {
+  project_id    String  @id @db.VarChar(255)
+  project_name  String? @db.VarChar(255)
+  project_owner String? @db.VarChar(255)
+}
+
+model team {
+  team_id    String  @id @db.VarChar(255)
+  team_name  String? @db.VarChar(255)
+  team_owner String? @db.VarChar(255)
+}
+
+model user_profile {
+  profile_id       String    @id @db.VarChar(255)
+  billing_id       String    @db.VarChar(255)
+  created_at       DateTime? @db.DateTime(6)
+  email_id         String    @unique(map: "UKfao4dbg2pu8f1ii154tx562s6") @db.VarChar(255)
+  group_id         String    @db.VarChar(255)
+  manager_email_id String    @db.VarChar(255)
+  name             String    @db.VarChar(255)
+  project_id       String    @db.VarChar(255)
+  role             String    @db.VarChar(255)
+  team_id          String    @db.VarChar(255)
+  updated_at       DateTime? @db.DateTime(6)
+}
+
+model Session {
+  id           String   @id @default(uuid()) @db.VarChar(36)
+  
+  userId       String   @db.VarChar(8) 
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  refreshToken String   @unique @db.VarChar(500)
+
+  ipAddress    String?  @db.VarChar(45)
+  device       String?  @db.VarChar(100)
+  browser      String?  @db.VarChar(100)
+  os           String?  @db.VarChar(100)
+  location     String?  @db.VarChar(255)
+  userAgent    String?  @db.VarChar(500)
+
+  isActive     Boolean  @default(true)
+  
+  createdAt    DateTime @default(now())
+  lastActiveAt DateTime @default(now())
+  expiresAt    DateTime 
+
+  @@index([userId])
 }
