@@ -171,3 +171,21 @@ export const verifySessionStatusService = async (refreshToken: string) => {
 
   return { isValid: true, status: "ACTIVE", message: "Session is valid" };
 };
+
+/* Function to clean up invalid sessions (Inactive OR Expired) */
+export const cleanupSessionsService = async () => {
+  try {
+    const result = await prisma.session.deleteMany({
+      where: {
+        OR: [
+          { isActive: false }, // Case 1: User logged out (Revoked)
+          { expiresAt: { lt: new Date() } }, // Case 2: Session naturally expired
+        ],
+      },
+    });
+    return result.count; // Returns number of deleted records
+  } catch (error) {
+    console.error("Error cleaning up sessions:", error);
+    throw error;
+  }
+};
