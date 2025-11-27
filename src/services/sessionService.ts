@@ -72,6 +72,7 @@ export const getUserSessionsService = async (userId: string) => {
       lastActiveAt: true,
       createdAt: true,
       expiresAt: true,
+      refreshToken: true,
     },
   });
 

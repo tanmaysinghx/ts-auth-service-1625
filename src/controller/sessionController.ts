@@ -6,6 +6,8 @@ import {
   verifySessionStatusService,
 } from "../services/sessionService";
 import { errorResponse, successResponse } from "../utils/responseUtils";
+import geoip from "geoip-lite";
+import requestIp from "request-ip";
 
 interface CustomRequest extends Request {
   transactionId?: string;
@@ -16,56 +18,42 @@ interface CustomRequest extends Request {
 export const storeSession = async (req: CustomRequest, res: Response) => {
   const transactionId = req.transactionId;
   try {
-    // 1. Extract User ID (Assuming Auth Middleware has run)
     const userId = req.user?.userId || req.user?.id;
-    if (!userId) {
-      return res
-        .status(401)
-        .json(
-          errorResponse("User not authenticated", "Auth Error", transactionId)
-        );
-    }
 
-    // 2. Extract Metadata (Body has priority, fallback to Headers)
-    const { refreshToken, location, device, browser, os } = req.body;
+    // 1. Get IP Address automatically
+    // This handles proxies, Nginx, etc. automatically
+    const ipAddress =
+      requestIp.getClientIp(req) || req.socket.remoteAddress || "";
 
-    const ipAddress = req.body.ipAddress || req.ip || req.socket.remoteAddress;
-    const userAgent = req.headers["user-agent"];
+    // 2. Get Location from IP
+    const geo = geoip.lookup(ipAddress);
 
-    // 3. Call Service
+    // If running on localhost (127.0.0.1), geo will be null.
+    // Fallback to the 'location' sent from Angular (Timezone) or "Unknown"
+    const detectedLocation = geo
+      ? `${geo.city}, ${geo.country}` // e.g., "New Delhi, IN"
+      : req.body.location; // Fallback to "Asia/Kolkata" from Angular
+
+    // 3. Extract other metadata from body
+    const { refreshToken, device, browser, os } = req.body;
+
+    // 4. Call Service
     const session = await storeSessionService({
       userId,
       refreshToken,
-      ipAddress,
+      ipAddress, // Real IP
+      location: detectedLocation, // Real City/Country
       device,
       browser,
       os,
-      location,
-      userAgent,
+      userAgent: req.headers["user-agent"],
     });
 
     return res
       .status(201)
-      .json(
-        successResponse(
-          session,
-          "Session metadata stored successfully",
-          transactionId
-        )
-      );
+      .json(successResponse(session, "Session stored", transactionId));
   } catch (err: any) {
-    // Handle case where session already exists for this token
-    if (err.message && err.message.includes("already exists")) {
-      // We return 200 or 201 here because from client perspective, it's fine
-      return res
-        .status(200)
-        .json(successResponse(null, "Session already active", transactionId));
-    }
-
-    const errorMessage = err?.message || "Failed to store session";
-    return res
-      .status(500)
-      .json(errorResponse(errorMessage, "Session Store Error", transactionId));
+    // ... error handling
   }
 };
 
