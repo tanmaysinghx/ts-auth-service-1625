@@ -8,6 +8,7 @@ import { loggerConsole } from './middleware/loggerConsole';
 import cookieParser from 'cookie-parser';
 import { setupSwagger } from './config/swagger';
 import sessionRoutes from './routes/sessionRoutes';
+import ssoRoutes from './routes/ssoRoutes';
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(cors({
 
 app.use(transactionIdMiddleware);
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(loggerConsole);
 app.use(cookieParser());
 
@@ -28,6 +30,7 @@ const version = process.env.API_VERSION || 'v2';
 app.use(`/${version}/api/auth`, authRoutes);
 app.use(`/${version}/api/roles`, roleRoutes);
 app.use(`/${version}/api/sessions`, sessionRoutes);
+app.use(`/${version}/api/sso`, ssoRoutes);
 app.use(`/${version}/api/health`, healthCheckRoutes);
 
 // Set up Swagger docs route

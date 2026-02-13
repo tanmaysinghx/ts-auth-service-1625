@@ -18,7 +18,8 @@ model User {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
   lastLoginAt        DateTime?
-  sessions    Session[]
+  sessions           Session[]
+  authCodes          AuthorizationCode[]
 }
 
 model Role {
@@ -87,5 +88,32 @@ model Session {
   lastActiveAt DateTime @default(now())
   expiresAt    DateTime 
 
+  @@index([userId])
+}
+
+model OAuthClient {
+  clientId      String   @id @db.VarChar(50)
+  clientSecret  String   @db.VarChar(255)
+  appName       String   @db.VarChar(100)
+  redirectUris  String   @db.VarChar(2000)
+  allowedScopes String   @default("openid,profile,email") @db.VarChar(500)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  codes         AuthorizationCode[]
+}
+
+model AuthorizationCode {
+  code        String      @id @db.VarChar(64)
+  clientId    String      @db.VarChar(50)
+  client      OAuthClient @relation(fields: [clientId], references: [clientId], onDelete: Cascade)
+  userId      String      @db.VarChar(8)
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  redirectUri String      @db.VarChar(500)
+  scope       String      @db.VarChar(500)
+  expiresAt   DateTime
+  used        Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+
+  @@index([clientId])
   @@index([userId])
 }

@@ -3,7 +3,7 @@ import swaggerUi from 'swagger-ui-express';
 import { Application } from 'express';
 
 const swaggerDefinition = {
-  openapi: '3.0.0', // OpenAPI version
+  openapi: '3.0.0',
   info: {
     title: 'Auth Service API',
     version: '1.0.0',
@@ -11,9 +11,37 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'http://localhost:1625/v2/api', // Your base URL
+      url: 'http://localhost:1625/v2/api',
     },
   ],
+  tags: [
+    { name: 'Auth', description: 'Authentication & token management' },
+    { name: 'Roles', description: 'Role management (admin-only)' },
+    { name: 'Sessions', description: 'Session management' },
+    { name: 'SSO', description: 'OAuth 2.0 / SSO endpoints' },
+    { name: 'Health', description: 'Service health check' },
+  ],
+  components: {
+    securitySchemes: {
+      BearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+    },
+    schemas: {
+      ApiResponse: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          transactionId: { type: 'string' },
+          message: { type: 'string' },
+          data: { type: 'object' },
+          error: { type: 'string' },
+        },
+      },
+    },
+  },
 };
 
 const options = {

@@ -9,6 +9,7 @@ declare global {
         roleId: string;
         email: string;
       };
+      ssoSessionId?: string;
     }
   }
 }
