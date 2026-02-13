@@ -9,19 +9,18 @@ import { errorResponse, successResponse } from "../utils/responseUtils";
 import geoip from "geoip-lite";
 import requestIp from "request-ip";
 
-interface CustomRequest extends Request {
-  transactionId?: string;
-  user?: any;
-}
-
 /* Controller to store session metadata (IP, Device, Location) */
-export const storeSession = async (req: CustomRequest, res: Response) => {
+export const storeSession = async (req: Request, res: Response) => {
   const transactionId = req.transactionId;
   try {
-    const userId = req.user?.userId || req.user?.id;
+    const userId = req.user?.userId;
+    if (!userId) {
+      return res
+        .status(401)
+        .json(errorResponse("User not authenticated", "Auth Error", transactionId));
+    }
 
     // 1. Get IP Address automatically
-    // This handles proxies, Nginx, etc. automatically
     const ipAddress =
       requestIp.getClientIp(req) || req.socket.remoteAddress || "";
 
@@ -29,10 +28,10 @@ export const storeSession = async (req: CustomRequest, res: Response) => {
     const geo = geoip.lookup(ipAddress);
 
     // If running on localhost (127.0.0.1), geo will be null.
-    // Fallback to the 'location' sent from Angular (Timezone) or "Unknown"
+    // Fallback to the 'location' sent from the client (Timezone) or "Unknown"
     const detectedLocation = geo
-      ? `${geo.city}, ${geo.country}` // e.g., "New Delhi, IN"
-      : req.body.location; // Fallback to "Asia/Kolkata" from Angular
+      ? `${geo.city}, ${geo.country}`
+      : req.body.location;
 
     // 3. Extract other metadata from body
     const { refreshToken, device, browser, os } = req.body;
@@ -41,8 +40,8 @@ export const storeSession = async (req: CustomRequest, res: Response) => {
     const session = await storeSessionService({
       userId,
       refreshToken,
-      ipAddress, // Real IP
-      location: detectedLocation, // Real City/Country
+      ipAddress,
+      location: detectedLocation,
       device,
       browser,
       os,
@@ -52,16 +51,19 @@ export const storeSession = async (req: CustomRequest, res: Response) => {
     return res
       .status(201)
       .json(successResponse(session, "Session stored", transactionId));
-  } catch (err: any) {
-    // ... error handling
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Failed to store session";
+    return res
+      .status(500)
+      .json(errorResponse(errorMessage, "Store Session Error", transactionId));
   }
 };
 
 /* Controller to get all active sessions for the logged-in user */
-export const getSessions = async (req: CustomRequest, res: Response) => {
+export const getSessions = async (req: Request, res: Response) => {
   const transactionId = req.transactionId;
   try {
-    const userId = req.user?.userId || req.user?.id;
+    const userId = req.user?.userId;
     if (!userId) {
       return res
         .status(401)
@@ -81,8 +83,8 @@ export const getSessions = async (req: CustomRequest, res: Response) => {
           transactionId
         )
       );
-  } catch (err: any) {
-    const errorMessage = err?.message || "Failed to fetch sessions";
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Failed to fetch sessions";
     return res
       .status(500)
       .json(errorResponse(errorMessage, "Fetch Session Error", transactionId));
@@ -90,10 +92,10 @@ export const getSessions = async (req: CustomRequest, res: Response) => {
 };
 
 /* Controller to revoke (logout) a specific session */
-export const revokeSession = async (req: CustomRequest, res: Response) => {
+export const revokeSession = async (req: Request, res: Response) => {
   const transactionId = req.transactionId;
   try {
-    const userId = req.user?.userId || req.user?.id;
+    const userId = req.user?.userId;
     const { id: sessionId } = req.params;
 
     if (!userId) {
@@ -111,8 +113,8 @@ export const revokeSession = async (req: CustomRequest, res: Response) => {
       .json(
         successResponse(message, "Session revoked successfully", transactionId)
       );
-  } catch (err: any) {
-    const errorMessage = err?.message || "Failed to revoke session";
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Failed to revoke session";
 
     if (
       errorMessage.includes("not found") ||
@@ -130,7 +132,7 @@ export const revokeSession = async (req: CustomRequest, res: Response) => {
 };
 
 /* Controller to validate if a refresh token is still active */
-export const validateSession = async (req: CustomRequest, res: Response) => {
+export const validateSession = async (req: Request, res: Response) => {
   const transactionId = req.transactionId;
   try {
     const { refreshToken } = req.body;
@@ -143,8 +145,8 @@ export const validateSession = async (req: CustomRequest, res: Response) => {
       .json(
         successResponse(result, "Session validation completed", transactionId)
       );
-  } catch (err: any) {
-    const errorMessage = err?.message || "Validation failed";
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Validation failed";
     return res
       .status(400)
       .json(errorResponse(errorMessage, "Validation Error", transactionId));

@@ -7,7 +7,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
   if (!token) return res.status(401).json({ error: 'Token missing' });
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!);
-    (req as any).user = decoded;
+    req.user = decoded as { userId: string; roleId: string; email: string };
     next();
   } catch (err) {
     return res.status(403).json({ error: 'Invalid token' });
@@ -15,7 +15,8 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 };
 
 export const adminOnly = async (req: Request, res: Response, next: NextFunction) => {
-  const userId = (req as any).user.userId;
+  const userId = req.user?.userId;
+  if (!userId) return res.status(401).json({ error: 'User not authenticated' });
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (user?.roleId !== '0001') return res.status(403).json({ error: 'Access Denied' });
   next();

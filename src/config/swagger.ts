@@ -5,9 +5,9 @@ import { Application } from 'express';
 const swaggerDefinition = {
   openapi: '3.0.0', // OpenAPI version
   info: {
-    title: 'Workflow Engine API',
+    title: 'Auth Service API',
     version: '1.0.0',
-    description: 'API Documentation for Workflow Engine',
+    description: 'API Documentation for Auth Service',
   },
   servers: [
     {
@@ -18,7 +18,7 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition,
-  apis: ['./src/routes/*.ts'], 
+  apis: ['./src/routes/*.ts'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);

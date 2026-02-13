@@ -44,10 +44,10 @@ export const loginUser = async (data: { email: string; password: string }) => {
   const accessToken = generateAccessToken(user.id, user.roleId, user.email);
   const refreshToken = generateRefreshToken(user.id);
   await prisma.user.update({ where: { email }, data: { lastLoginAt: new Date() } });
-  let roleId = user?.roleId;
+  const roleId = user.roleId;
   const role = await prisma.role.findUnique({ where: { id: roleId } });
-  let roleName = role?.roleName;
-  let userId = user?.id;
+  const roleName = role?.roleName;
+  const userId = user.id;
   return { accessToken, refreshToken, email, roleId, roleName, userId };
 };
 
@@ -111,7 +111,3 @@ export const verifyTokenService = async (token: string) => {
   }
 };
 
-/* Function to extract username from email */
-const getUsernameFromEmail = (email: string) => {
-  return email.split('@')[0];
-};

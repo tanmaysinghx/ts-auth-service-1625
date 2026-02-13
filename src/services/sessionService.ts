@@ -1,5 +1,5 @@
-import { Session } from "@prisma/client";
 import prisma from "../config/db";
+import logger from "../utils/logger";
 
 /* Function to store session metadata after login */
 export const storeSessionService = async (data: {
@@ -185,7 +185,7 @@ export const cleanupSessionsService = async () => {
     });
     return result.count; // Returns number of deleted records
   } catch (error) {
-    console.error("Error cleaning up sessions:", error);
+    logger.error(`Error cleaning up sessions: ${error}`);
     throw error;
   }
 };

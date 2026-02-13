@@ -5,9 +5,9 @@ import dotenv from 'dotenv';
 import logger from "../utils/logger";
 dotenv.config();
 
-/* Function needed to seed intial data to DB */
+/* Function needed to seed initial data to DB */
 async function main() {
-  logger.info("Database URL:", process.env.DATABASE_URL);
+  logger.info(`Database URL: ${process.env.DATABASE_URL}`);
   await prisma.role.createMany({
     data: [
       { id: '0001', roleName: 'superuser' },
@@ -58,14 +58,14 @@ async function main() {
       },
     ]
   });
+  logger.info("Data has been seeded successfully!");
 }
 
 main()
   .catch(e => {
-    console.error(e);
+    logger.error(`Seed failed: ${e}`);
     process.exit(1);
   })
   .finally(async () => {
     await prisma.$disconnect();
-    logger.info("Data has been seeded successfully!");
   });

@@ -183,7 +183,7 @@ describe('Auth Controllers', () => {
 
             expect(res.status).toBe(403);
             expect(res.body.success).toBe(false);
-            expect(res.body.message).toMatch(/refresh token error/i);
+            expect(res.body.message).toMatch(/token verification error/i);
         });
     });
 });

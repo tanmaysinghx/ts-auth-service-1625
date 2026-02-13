@@ -1,7 +1,7 @@
 export interface ApiResponse<T> {
   success: boolean;
   message: string;
-  transactionId: any;
+  transactionId?: string;
   data?: T;
   error?: string;
 }
