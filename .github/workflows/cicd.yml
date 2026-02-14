@@ -1,4 +1,4 @@
-name: CICD
+name: 🚀 CI/CD Pipeline
 
 on:
   push:
@@ -10,67 +10,77 @@ on:
 
 jobs:
   lint:
+    name: 🎨 Linting
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
+      - name: 📥 Checkout source
         uses: actions/checkout@v3
-      - name: Setup Node.js
+      - name: 🟢 Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18"
           cache: 'npm'
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: npm ci
-      - name: Run Lint
+      - name: 🔍 Run Lint
         run: npm run lint
 
   test:
+    name: 🧪 Testing
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
+      - name: 📥 Checkout source
         uses: actions/checkout@v3
-      - name: Setup Node.js
+      - name: 🟢 Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18"
           cache: 'npm'
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: npm ci
-      - name: Run Tests
+      - name: 🧪 Run Tests
         run: npm test
 
   audit:
+    name: 🛡️ Security Audit
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
+      - name: 📥 Checkout source
         uses: actions/checkout@v3
-      - name: Setup Node.js
+      - name: 🟢 Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18"
           cache: 'npm'
-      - name: Run Security Audit
+      - name: 🔒 Run Security Audit
         run: npm audit --audit-level=high
 
   build:
+    name: 🐳 Build & Push
     needs: [lint, test, audit]
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - name: Checkout source
+      - name: 📥 Checkout source
         uses: actions/checkout@v3
-      - name: Setup Node.js
+      - name: 🟢 Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18"
           cache: 'npm'
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: npm ci
-      - name: Build project
+      - name: 🏗️ Build project
         run: npm run build
-      - name: Login to Docker Hub
+      - name: 🔑 Login to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-      - name: Build Docker image
+      - name: 🐳 Build Docker image
         run: docker build -t tanmaysinghx/ts-auth-service-1625:latest .
-      - name: Push Docker image
+      - name: 🚀 Push Docker image
         run: docker push tanmaysinghx/ts-auth-service-1625:latest
+      - name: 📝 Job Summary
+        if: always()
+        run: |
+          echo "## 🚀 Deployment Successful" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Docker Image Pushed: \`tanmaysinghx/ts-auth-service-1625:latest\`" >> $GITHUB_STEP_SUMMARY
+          echo "📅 Date: $(date)" >> $GITHUB_STEP_SUMMARY
