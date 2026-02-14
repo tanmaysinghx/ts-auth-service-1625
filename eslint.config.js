@@ -1,18 +1,10 @@
 const globals = require('globals');
 const pluginJs = require('@eslint/js');
-const { configs: tseslintConfigs } = require('@typescript-eslint/eslint-plugin');
+const tseslint = require('typescript-eslint');
 
 module.exports = [
-  {
-    files: ['**/*.{js,mjs,cjs,ts}'],
-    languageOptions: {
-      globals: globals.browser,
-    },
-    // Directly include recommended configs
-    ...pluginJs.configs.recommended,
-    ...tseslintConfigs.recommended,
-    rules: {
-      // Your custom rules here
-    },
-  },
+  {files: ["**/*.{js,mjs,cjs,ts}"]},
+  {languageOptions: { globals: globals.browser }},
+  pluginJs.configs.recommended,
+  ...tseslint.configs.recommended,
 ];

@@ -4,7 +4,8 @@ import { Request, Response, NextFunction } from 'express';
 const ALLOWED_ROLES = ['superuser', 'admin', 'editor', 'viewer', 'user', 'guest', 'moderator', 'operator', 'analyst', 'developer'];
 
 export const validateRegisterData = (req: Request, res: Response, next: NextFunction) => {
-    let { email, password, roleName } = req.body;
+    let { email } = req.body;
+    const { password, roleName } = req.body;
 
     if (!email || !password || !roleName) {
         return res.status(400).json({ message: "Email, password, and roleName are required" });
@@ -46,7 +47,8 @@ export const validateRegisterData = (req: Request, res: Response, next: NextFunc
 };
 
 export const validateLoginData = (req: Request, res: Response, next: NextFunction) => {
-    let { email, password } = req.body;
+    let { email } = req.body;
+    const { password } = req.body;
 
     if (!email || !password) {
         return res.status(400).json({ message: "Email and password are required" });
