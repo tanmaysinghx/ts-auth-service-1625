@@ -124,7 +124,7 @@ export const touchSessionService = async (sessionId: string) => {
       where: { id: sessionId },
       data: { lastActiveAt: new Date() },
     });
-  } catch (e) {
+  } catch (_e) {
     // Ignore errors if session was deleted concurrently
   }
 };

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import path from 'path';
+
 import {
     validateClient,
     createAuthorizationCode,
@@ -204,38 +204,4 @@ export const logout = async (req: Request, res: Response) => {
     return res.status(200).json({ success: true, message: 'SSO session cleared' });
 };
 
-/* ─── Helper ─── */
 
-function renderLoginError(message: string, query: Record<string, string>): string {
-    const params = new URLSearchParams(query).toString();
-    const version = process.env.API_VERSION || 'v2';
-    return `
-    <html>
-    <head><meta charset="utf-8"><title>Login - Auth Service</title>
-    <style>
-      * { margin:0; padding:0; box-sizing:border-box; }
-      body { font-family:'Inter',system-ui,sans-serif; background:#0f172a; color:#f1f5f9; display:flex; justify-content:center; align-items:center; min-height:100vh; }
-      .card { background:#1e293b; padding:2.5rem; border-radius:1rem; width:100%; max-width:400px; box-shadow:0 25px 50px rgba(0,0,0,.3); }
-      h1 { font-size:1.5rem; margin-bottom:.5rem; }
-      .subtitle { color:#94a3b8; margin-bottom:1.5rem; font-size:.9rem; }
-      .error { background:#7f1d1d; color:#fca5a5; padding:.75rem 1rem; border-radius:.5rem; margin-bottom:1rem; font-size:.85rem; }
-      label { display:block; font-size:.85rem; color:#94a3b8; margin-bottom:.25rem; }
-      input { width:100%; padding:.75rem 1rem; border:1px solid #334155; border-radius:.5rem; background:#0f172a; color:#f1f5f9; font-size:1rem; margin-bottom:1rem; outline:none; transition:border-color .2s; }
-      input:focus { border-color:#3b82f6; }
-      button { width:100%; padding:.75rem; border:none; border-radius:.5rem; background:linear-gradient(135deg,#3b82f6,#8b5cf6); color:#fff; font-size:1rem; font-weight:600; cursor:pointer; transition:transform .1s; }
-      button:hover { transform:translateY(-1px); }
-    </style></head>
-    <body>
-      <div class="card">
-        <h1>🔐 Sign In</h1>
-        <p class="subtitle">Auth Service SSO</p>
-        <div class="error">${message}</div>
-        <form method="POST" action="/${version}/api/sso/authorize?${params}">
-          <label>Email</label><input type="email" name="email" required autofocus>
-          <label>Password</label><input type="password" name="password" required>
-          <button type="submit">Sign In</button>
-        </form>
-      </div>
-    </body></html>
-  `;
-}

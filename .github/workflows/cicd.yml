@@ -3,10 +3,10 @@ name: CICD
 on:
   push:
     branches:
-      - deployment
+      - main
   pull_request:
     branches:
-      - deployment
+      - main
 
 jobs:
   lint:

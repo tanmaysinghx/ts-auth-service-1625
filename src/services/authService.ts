@@ -80,7 +80,7 @@ export const refreshToken = async (refreshToken: string) => {
     throw new Error('Refresh token is required');
   }
   try {
-    const decoded: any = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!);
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!) as jwt.JwtPayload;
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
     });
@@ -93,7 +93,7 @@ export const refreshToken = async (refreshToken: string) => {
       { expiresIn: '15m' }
     );
     return newAccessToken;
-  } catch (err) {
+  } catch (_err) {
     throw new Error('Invalid or expired refresh token');
   }
 };
@@ -106,7 +106,7 @@ export const verifyTokenService = async (token: string) => {
       return { success: true, message: "Token is valid", ...decoded };
     }
     return { success: true, message: "Token is valid", token: decoded };
-  } catch (error) {
+  } catch (_error) {
     throw new Error('Invalid or expired token');
   }
 };

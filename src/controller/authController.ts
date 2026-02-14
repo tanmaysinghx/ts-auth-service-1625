@@ -19,8 +19,8 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
   const transactionId = req.transactionId;
   try {
     const tokens = await loginUser(req.body);
-    const { refreshToken, accessToken, email } = tokens;
-    setCookies(res, refreshToken, accessToken, email);
+    const { refreshToken, accessToken } = tokens;
+    setCookies(res, refreshToken, accessToken);
     return res.status(201).json(successResponse(tokens, "User logged in successfully", transactionId));
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : 'Login failed';
@@ -65,7 +65,7 @@ export const verifyTokenController = async (req: Request, res: Response) => {
   }
 };
 
-const setCookies = (res: Response, refreshToken: string, accessToken?: string, email?: string) => {
+const setCookies = (res: Response, refreshToken: string, accessToken?: string) => {
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
