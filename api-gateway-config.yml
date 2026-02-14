@@ -1,0 +1,170 @@
+services:
+  - id: "ts-auth-service-1625"
+    name: "TS Auth Service"
+    description: "Authentication and Authorization Microservice"
+    baseUrls:
+      local: "http://localhost:1625"
+      docker: "http://ts-auth-service-1625:1625"
+    workflows:
+      # --- Auth Routes ---
+      - id: "auth-register"
+        name: "Register User"
+        path: "/v2/api/auth/register"
+        method: "POST"
+        steps:
+          tokenCheck: false
+          otpFlow: false
+          notifications:
+            - type: "email"
+              enabled: true
+              config:
+                subject: "Welcome to TS Auth Service"
+
+      - id: "auth-login"
+        name: "Login User"
+        path: "/v2/api/auth/login"
+        method: "POST"
+        steps:
+          tokenCheck: false
+          otpFlow: true
+          notifications:
+            - type: "email"
+              enabled: true
+              config:
+                emailOTP: true
+                expirySeconds: 300
+
+      - id: "auth-change-password"
+        name: "Change Password"
+        path: "/v2/api/auth/change-password"
+        method: "POST"
+        steps:
+          tokenCheck: true
+          otpFlow: false
+
+      - id: "auth-refresh-token"
+        name: "Refresh Token"
+        path: "/v2/api/auth/refresh-token"
+        method: "POST"
+        steps:
+          tokenCheck: false
+          otpFlow: false
+
+      - id: "auth-verify-token"
+        name: "Verify Token"
+        path: "/v2/api/auth/verify/verify-token"
+        method: "POST"
+        steps:
+          tokenCheck: false
+          otpFlow: false
+
+      # --- Role Routes ---
+      - id: "roles-add"
+        name: "Add Role"
+        path: "/v2/api/roles/add-roles"
+        method: "POST"
+        steps:
+          tokenCheck: true
+          otpFlow: false
+          roles: ["admin"]
+
+      - id: "roles-edit"
+        name: "Edit Role"
+        path: "/v2/api/roles/edit-roles/:roleId"
+        method: "PUT"
+        steps:
+          tokenCheck: true
+          otpFlow: false
+          roles: ["admin"]
+
+      # --- Session Routes ---
+      - id: "session-store"
+        name: "Store Session"
+        path: "/v2/api/sessions/store-session"
+        method: "POST"
+        steps:
+          tokenCheck: true
+          otpFlow: false
+
+      - id: "session-get"
+        name: "Get Sessions"
+        path: "/v2/api/sessions/get-sessions"
+        method: "GET"
+        steps:
+          tokenCheck: true
+          otpFlow: false
+
+      - id: "session-revoke"
+        name: "Revoke Session"
+        path: "/v2/api/sessions/:id/revoke"
+        method: "PATCH"
+        steps:
+          tokenCheck: true
+          otpFlow: false
+
+      - id: "session-validate"
+        name: "Validate Session"
+        path: "/v2/api/sessions/validate-session"
+        method: "POST"
+        steps:
+          tokenCheck: false
+          otpFlow: false
+
+      # --- SSO Routes ---
+      - id: "sso-authorize-get"
+        name: "SSO Authorize (Page)"
+        path: "/v2/api/sso/authorize"
+        method: "GET"
+        steps:
+          tokenCheck: false
+          otpFlow: false
+
+      - id: "sso-authorize-post"
+        name: "SSO Authorize (Submit)"
+        path: "/v2/api/sso/authorize"
+        method: "POST"
+        steps:
+          tokenCheck: false
+          otpFlow: true
+
+      - id: "sso-token"
+        name: "SSO Token Exchange"
+        path: "/v2/api/sso/token"
+        method: "POST"
+        steps:
+          tokenCheck: false
+          otpFlow: false
+
+      - id: "sso-userinfo"
+        name: "SSO User Info"
+        path: "/v2/api/sso/userinfo"
+        method: "GET"
+        steps:
+          tokenCheck: true
+          otpFlow: false
+
+      - id: "sso-clients-register"
+        name: "Register OAuth Client"
+        path: "/v2/api/sso/clients"
+        method: "POST"
+        steps:
+          tokenCheck: true
+          otpFlow: false
+          roles: ["admin"]
+
+      - id: "sso-logout"
+        name: "SSO Logout"
+        path: "/v2/api/sso/logout"
+        method: "POST"
+        steps:
+          tokenCheck: false
+          otpFlow: false
+
+      # --- Health Route ---
+      - id: "health-check"
+        name: "Health Check"
+        path: "/v2/api/health/health-check"
+        method: "GET"
+        steps:
+          tokenCheck: false
+          otpFlow: false

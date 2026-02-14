@@ -108,8 +108,14 @@ Server → `http://localhost:1625` | Swagger → `http://localhost:1625/api-docs
 ## Docker
 
 ```bash
-docker compose up -d
+# Build the image
+docker build -t ts-auth-service .
+
+# Run with environment variables from your local .env file
+docker run -p 1625:1625 --env-file .env ts-auth-service
 ```
+
+> **Note**: Never bake your `.env` file into the Docker image. Always inject it at runtime using `--env-file` or `-e` flags for security.
 
 ---
 
