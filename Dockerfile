@@ -13,11 +13,11 @@ RUN npm install
 # Copy the rest of your application code
 COPY . .
 
-# Generate Prisma client
-RUN npx prisma generate
+# Build the TypeScript application
+RUN npm run build
 
 # Expose the application port
 EXPOSE 1625
 
-# Start the application
-CMD ["npm", "run", "dev"]
+# Start the compiled application natively (avoids experimental ts-node crashes)
+CMD ["npm", "start"]

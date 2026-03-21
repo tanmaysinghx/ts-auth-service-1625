@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/server.ts",
+    "start": "node src/server.js",
     "dev": "nodemon src/server.ts",
     "predev": "echo 'Starting development server...'",
     "development": "ts-node-dev --respawn --transpile-only src/server.ts",

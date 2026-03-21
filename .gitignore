@@ -1,3 +1,7 @@
+# Built files
+src/**/*.js
+src/**/*.js.map
+dist/
 node_modules
 # Keep environment variables out of version control
 .env
