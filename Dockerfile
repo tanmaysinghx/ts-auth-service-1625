@@ -20,4 +20,5 @@ RUN npm run build
 EXPOSE 1625
 
 # Start the compiled application natively (avoids experimental ts-node crashes)
-CMD ["npm", "start"]
+# Also syncs the database schema (useful for first-time setup or migrations)
+CMD npx prisma db push --accept-data-loss && npm start
